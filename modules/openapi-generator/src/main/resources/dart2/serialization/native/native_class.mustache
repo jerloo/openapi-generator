@@ -13,7 +13,7 @@ class {{{classname}}} {
   // maximum: {{{.}}}
     {{/maximum}}
   {{/isEnum}}
-  {{{datatypeWithEnum}}}{{^required}}?{{/required}} {{{name}}};
+  {{{datatypeWithEnum}}}? {{{name}}};
 
   {{/vars}}
   @override
@@ -123,11 +123,11 @@ class {{{classname}}} {
         {{{name}}}: {{items.complexType}}.mapFromJson(json[r'{{{baseName}}}']),
                   {{/items.complexType}}
                   {{^items.complexType}}
-        {{{name}}}: json[r'{{{baseName}}}'] as Map<String, {{{items.datatypeWithEnum}}}>,
+        {{{name}}}: json[r'{{{baseName}}}'] == null ? null : json[r'{{{baseName}}}'] as Map<String, {{{items.datatypeWithEnum}}}>?,
                   {{/items.complexType}}
                 {{/items.isMap}}
                 {{^items.isMap}}
-        {{{name}}}: json[r'{{{baseName}}}'] as {{{datatypeWithEnum}}},
+        {{{name}}}: json[r'{{{baseName}}}'] == null ? null : json[r'{{{baseName}}}'] as {{{datatypeWithEnum}}}?,
                 {{/items.isMap}}
               {{/items.isArray}}
             {{/isMap}}
@@ -136,7 +136,7 @@ class {{{classname}}} {
         {{{name}}}: null, // No support for decoding binary content from JSON
               {{/isBinary}}
               {{^isBinary}}
-        {{{name}}}: {{{complexType}}}.fromJson(json[r'{{{baseName}}}']),
+        {{{name}}}: json[r'{{{baseName}}}'] == null ? null : {{{complexType}}}.fromJson(json[r'{{{baseName}}}']),
               {{/isBinary}}
             {{/isMap}}
           {{/isArray}}
@@ -154,14 +154,14 @@ class {{{classname}}} {
           {{/isArray}}
           {{^isArray}}
             {{#isMap}}
-        {{{name}}}: json[r'{{{baseName}}}'] as Map<String, {{{items.datatypeWithEnum}}}>,
+        {{{name}}}: json[r'{{{baseName}}}'] == null ? null : json[r'{{{baseName}}}'] as Map<String, {{{items.datatypeWithEnum}}}>,
             {{/isMap}}
             {{^isMap}}
                 {{^isEnum}}
-        {{{name}}}: json[r'{{{baseName}}}'] as {{{datatypeWithEnum}}},
+        {{{name}}}: json[r'{{{baseName}}}'] == null ? null : json[r'{{{baseName}}}'] as {{{datatypeWithEnum}}}?,
                 {{/isEnum}}
                 {{#isEnum}}
-        {{{name}}}: {{{enumName}}}.fromJson(json[r'{{{baseName}}}']),
+        {{{name}}}: json[r'{{{baseName}}}'] == null ? null : {{{enumName}}}.fromJson(json[r'{{{baseName}}}']),
                 {{/isEnum}}
             {{/isMap}}
           {{/isArray}}
